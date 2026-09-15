@@ -17,6 +17,7 @@ import {
   Zap,
 } from "lucide-react";
 import { useState } from "react";
+import type { ComponentType } from "react";
 import { Button } from "@/components/ui/button";
 import logoAsset from "@/assets/gcar-logo.jpg.asset.json";
 import heroImage from "@/assets/gcar-hero.jpg";
@@ -42,6 +43,21 @@ const services = [
 const navItems = [
   ["Início", "#inicio"], ["Serviços", "#servicos"], ["Sobre nós", "#sobre"],
   ["Galeria", "#galeria"], ["Depoimentos", "#depoimentos"], ["FAQ", "#faq"], ["Contato", "#contato"],
+];
+
+const advantages: Array<{ number: string; name: string; text: string; icon: ComponentType<{ className?: string }> }> = [
+  { number: "01", name: "Cuidado", text: "Cada veículo recebe atenção individual.", icon: Sparkles },
+  { number: "02", name: "Qualidade", text: "Técnicas adequadas para cada acabamento.", icon: Target },
+  { number: "03", name: "Proteção", text: "Tratamentos pensados para preservar.", icon: ShieldCheck },
+  { number: "04", name: "Resultado", text: "Acabamento visual impecável.", icon: Zap },
+];
+
+const galleryItems = [
+  { src: heroImage, alt: "Polimento profissional", span: "col-span-2 row-span-2" },
+  { src: interiorImage, alt: "Detalhamento interno", span: "row-span-1" },
+  { src: protectionImage, alt: "Proteção da pintura", span: "row-span-2" },
+  { src: washImage, alt: "Lavagem detalhada", span: "row-span-2" },
+  { src: polishingImage, alt: "Correção de pintura", span: "row-span-1" },
 ];
 
 export const Route = createFileRoute("/")({
@@ -116,9 +132,7 @@ function Index() {
       </section>
 
       <section className="border-y border-border bg-card/50 py-20 sm:py-28"><div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8"><SectionHeading eyebrow="O padrão G Car" title={<>Mais que estética.<br/><span className="text-primary">Cuidado em cada detalhe.</span></>} description="Não se trata apenas de limpar. Cada etapa é pensada para valorizar o veículo, preservar seus materiais e entregar um resultado que você percebe no primeiro olhar." />
-        <div className="grid gap-px overflow-hidden rounded-md border border-border bg-border sm:grid-cols-2 lg:grid-cols-4">{[
-          ["01", "Cuidado", "Cada veículo recebe atenção individual.", Sparkles], ["02", "Qualidade", "Técnicas adequadas para cada acabamento.", Target], ["03", "Proteção", "Tratamentos pensados para preservar.", ShieldCheck], ["04", "Resultado", "Acabamento visual impecável.", Zap],
-        ].map(([num, name, text, Icon]) => <article key={String(num)} className="group bg-card p-7 transition-colors hover:bg-surface-elevated"><div className="flex items-start justify-between"><span className="font-display text-sm font-bold text-primary">{String(num)}</span><Icon className="h-6 w-6 text-muted-foreground transition-colors group-hover:text-primary" /></div><h3 className="mt-12 font-display text-3xl font-bold uppercase">{String(name)}</h3><p className="mt-2 text-sm leading-relaxed text-muted-foreground">{String(text)}</p></article>)}</div>
+        <div className="grid gap-px overflow-hidden rounded-md border border-border bg-border sm:grid-cols-2 lg:grid-cols-4">{advantages.map(({ number, name, text, icon: Icon }) => <article key={number} className="group bg-card p-7 transition-colors hover:bg-surface-elevated"><div className="flex items-start justify-between"><span className="font-display text-sm font-bold text-primary">{number}</span><Icon className="h-6 w-6 text-muted-foreground transition-colors group-hover:text-primary" /></div><h3 className="mt-12 font-display text-3xl font-bold uppercase">{name}</h3><p className="mt-2 text-sm leading-relaxed text-muted-foreground">{text}</p></article>)}</div>
       </div></section>
 
       <section id="servicos" className="py-20 sm:py-28"><div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8"><SectionHeading eyebrow="Tratamentos" title="Nossos serviços" description="Uma seleção inicial de cuidados automotivos. A indicação ideal é definida após entendermos o estado e a necessidade do seu veículo." />
@@ -129,9 +143,7 @@ function Index() {
       <section className="border-y border-border bg-card/45 py-20 sm:py-28"><div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8"><SectionHeading eyebrow="Resultado visível" title={<>Olhe a <span className="text-primary">diferença.</span></>} description="Arraste o controle e perceba como um acabamento bem executado transforma a leitura da pintura." /><Comparison /></div></section>
 
       <section id="galeria" className="py-20 sm:py-28"><div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8"><div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-end"><SectionHeading eyebrow="Nosso universo" title="Cuidado que aparece" /><Button asChild variant="premiumOutline" size="xl"><a href={INSTAGRAM_URL} target="_blank" rel="noreferrer"><Instagram />Ver mais no Instagram</a></Button></div>
-        <div className="grid auto-rows-[180px] grid-cols-2 gap-3 md:auto-rows-[230px] md:grid-cols-4">{[
-          [heroImage,"Polimento profissional", "col-span-2 row-span-2"], [interiorImage,"Detalhamento interno", "row-span-1"], [protectionImage,"Proteção da pintura", "row-span-2"], [washImage,"Lavagem detalhada", "row-span-2"], [polishingImage,"Correção de pintura", "row-span-1"],
-        ].map(([src, alt, span]) => <div key={alt} className={`group overflow-hidden rounded-sm ${span}`}><img src={src} alt={alt} loading="lazy" className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]" /></div>)}</div>
+        <div className="grid auto-rows-[180px] grid-cols-2 gap-3 md:auto-rows-[230px] md:grid-cols-4">{galleryItems.map(({ src, alt, span }) => <div key={alt} className={`group overflow-hidden rounded-sm ${span}`}><img src={src} alt={alt} loading="lazy" className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]" /></div>)}</div>
         <p className="mt-4 text-xs text-muted-foreground">Imagens ilustrativas temporárias. Envie registros reais da G Car para substituição.</p>
       </div></section>
 
