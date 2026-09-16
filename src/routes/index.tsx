@@ -10,8 +10,10 @@ import {
   MapPin,
   Menu,
   MessageCircle,
+  Navigation,
   ShieldCheck,
   Sparkles,
+  Star,
   Target,
   X,
   Zap,
@@ -25,10 +27,24 @@ import polishingImage from "@/assets/service-polimento.jpg";
 import interiorImage from "@/assets/service-higienizacao.jpg";
 import protectionImage from "@/assets/service-protecao.jpg";
 import washImage from "@/assets/service-lavagem.jpg";
-import comparisonImage from "@/assets/before-after.jpg";
 
 const WHATSAPP_NUMBER = "5541985106370";
 const INSTAGRAM_URL = "https://www.instagram.com/gcaresteticaautomotivaa/";
+
+const PLACE_ID = "ChIJz2m3RCXh3JQRr9SijGZm4Vc";
+const ADDRESS = "R. Mario Straioto, 481 — Lamenha Grande, Almirante Tamandaré - PR, 83511-535";
+const GOOGLE_REVIEWS_URL = "https://search.google.com/local/reviews?placeid=" + PLACE_ID;
+const DIRECTIONS_URL = `https://www.google.com/maps/dir/?api=1&destination_place_id=${PLACE_ID}&destination=${encodeURIComponent("GCAR ESTÉTICA AUTOMOTIVA, " + ADDRESS)}`;
+const MAP_EMBED_URL = `https://www.google.com/maps/embed/v1/place?key=${import.meta.env["VITE_LOVABLE_CONNECTOR_GOOGLE_MAPS_BROWSER_KEY"]}&q=place_id:${PLACE_ID}&language=pt-BR`;
+const GOOGLE_RATING = 5.0;
+const GOOGLE_REVIEW_COUNT = 4;
+
+const googleReviews = [
+  { author: "Juliano Brito", when: "um mês atrás", rating: 5, text: "Serviço sensacional, superou as expectativas, eu sou muito chato pra limpeza do carro, em 3 anos é a primeira vez que mando lavar fora e ficou espetacular, vidro mais cristalino que já vi, tudo feito no capricho, recomendo sem medo!!!" },
+  { author: "Lucas Lima", when: "3 meses atrás", rating: 5, text: "Já levei meu carro em vários Lava car da região mas sempre deixavam a desejar em algo, eu que sou chato com o carro foi o único lugar que me surpreendeu, detalhista mesmo, super indico 👏🏻" },
+  { author: "Marcelo Bahl", when: "3 meses atrás", rating: 5, text: "Atendimento top, e serviço realizado foi sensacional. Preço compatível com o mercado, quer da um UP no carro? O cara é diferenciado." },
+  { author: "Rafael Freitas", when: "2 meses atrás", rating: 5, text: "Fez a limpeza completa interna e externa no capricho, recomendo para todos aqui do Lamenha grande 🤝" },
+];
 
 const whatsappUrl = (message = "Olá! Gostaria de agendar uma avaliação para o meu veículo.") =>
   `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
@@ -42,7 +58,7 @@ const services = [
 
 const navItems = [
   ["Início", "#inicio"], ["Serviços", "#servicos"], ["Sobre nós", "#sobre"],
-  ["Galeria", "#galeria"], ["Depoimentos", "#depoimentos"], ["FAQ", "#faq"], ["Contato", "#contato"],
+  ["Galeria", "#galeria"], ["Avaliações", "#avaliacoes"], ["FAQ", "#faq"], ["Contato", "#contato"],
 ];
 
 const advantages: Array<{ number: string; name: string; text: string; icon: ComponentType<{ className?: string }> }> = [
@@ -81,7 +97,7 @@ export const Route = createFileRoute("/")({
       { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [{ rel: "canonical", href: "/" }],
-    scripts: [{ type: "application/ld+json", children: JSON.stringify({ "@context": "https://schema.org", "@type": "AutoWash", name: "G Car Estética Automotiva", sameAs: [INSTAGRAM_URL], telephone: "+55 41 98510-6370", openingHours: "Mo-Sa 07:00-19:00" }) }],
+    scripts: [{ type: "application/ld+json", children: JSON.stringify({ "@context": "https://schema.org", "@type": "AutoWash", name: "GCAR Estética Automotiva", sameAs: [INSTAGRAM_URL], telephone: "+55 41 98510-6370", address: { "@type": "PostalAddress", streetAddress: "R. Mario Straioto, 481", addressLocality: "Almirante Tamandaré", addressRegion: "PR", postalCode: "83511-535", addressCountry: "BR" }, geo: { "@type": "GeoCoordinates", latitude: -25.348639, longitude: -49.3018283 }, openingHours: ["Mo-Fr 07:00-19:00", "Sa 08:00-16:00"], aggregateRating: { "@type": "AggregateRating", ratingValue: GOOGLE_RATING, reviewCount: GOOGLE_REVIEW_COUNT } }) }],
   }),
   component: Index,
 });
@@ -114,15 +130,8 @@ function SectionHeading({ eyebrow, title, description }: { eyebrow: string; titl
   return <div className="mb-10 max-w-3xl"><p className="mb-3 text-xs font-bold uppercase text-primary">{eyebrow}</p><h2 className="font-display text-4xl font-bold uppercase leading-none sm:text-6xl">{title}</h2>{description && <p className="mt-5 max-w-2xl leading-relaxed text-muted-foreground">{description}</p>}</div>;
 }
 
-function Comparison() {
-  const [position, setPosition] = useState(50);
-  return <div className="relative aspect-[16/10] overflow-hidden rounded-md border border-border bg-card">
-    <img src={comparisonImage} alt="Comparação visual do acabamento automotivo" width={1600} height={1008} loading="lazy" className="h-full w-full object-cover" />
-    <div className="absolute inset-y-0 right-0 overflow-hidden" style={{ width: `${100 - position}%` }}><img src={comparisonImage} alt="Acabamento após o detalhamento" width={1600} height={1008} className="absolute inset-y-0 right-0 h-full max-w-none object-cover saturate-125 contrast-125" style={{ width: `${10000 / (100 - position || 1)}%` }} /></div>
-    <div className="absolute inset-y-0 w-px bg-primary" style={{ left: `${position}%` }}><span className="absolute left-1/2 top-1/2 flex h-12 w-12 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-premium">↔</span></div>
-    <span className="absolute left-4 top-4 bg-background/80 px-3 py-1 text-xs font-bold uppercase backdrop-blur">Antes</span><span className="absolute right-4 top-4 bg-primary px-3 py-1 text-xs font-bold uppercase text-primary-foreground">Depois</span>
-    <input aria-label="Arraste para comparar antes e depois" type="range" min="5" max="95" value={position} onChange={(e) => setPosition(Number(e.target.value))} className="absolute inset-0 h-full w-full cursor-ew-resize opacity-0" />
-  </div>;
+function Stars({ rating, className = "" }: { rating: number; className?: string }) {
+  return <div className={`flex items-center gap-0.5 ${className}`} aria-label={`${rating} de 5 estrelas`}>{[1,2,3,4,5].map(i => <Star key={i} className={`h-4 w-4 ${i <= Math.round(rating) ? "fill-primary text-primary" : "text-muted-foreground"}`} />)}</div>;
 }
 
 function Index() {
@@ -149,7 +158,6 @@ function Index() {
         <p className="mt-5 text-center text-xs text-muted-foreground">Serviços e imagens apresentados como base inicial; confirme o tratamento ideal pelo WhatsApp.</p>
       </div></section>
 
-      <section className="border-y border-border bg-card/45 py-20 sm:py-28"><div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8"><SectionHeading eyebrow="Resultado visível" title={<>Olhe a <span className="text-primary">diferença.</span></>} description="Arraste o controle e perceba como um acabamento bem executado transforma a leitura da pintura." /><Comparison /></div></section>
 
       <section id="galeria" className="py-20 sm:py-28"><div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8"><div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-end"><SectionHeading eyebrow="Nosso universo" title="Cuidado que aparece" /><Button asChild variant="premiumOutline" size="xl"><a href={INSTAGRAM_URL} target="_blank" rel="noreferrer"><Instagram />Ver mais no Instagram</a></Button></div>
         <div className="grid auto-rows-[180px] grid-cols-2 gap-3 md:auto-rows-[230px] md:grid-cols-4">{galleryItems.map(({ src, alt, span }) => <div key={alt} className={`group overflow-hidden rounded-sm ${span}`}><img src={src} alt={alt} loading="lazy" className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]" /></div>)}</div>
@@ -158,13 +166,29 @@ function Index() {
 
       <section id="sobre" className="border-y border-border bg-card/50 py-20 sm:py-28"><div className="mx-auto grid max-w-7xl gap-12 px-4 sm:px-6 lg:grid-cols-[0.85fr_1.15fr] lg:px-8"><div className="relative mx-auto aspect-square w-full max-w-md"><img src={logoAsset.url} alt="Logotipo G Car Estética Automotiva" className="h-full w-full rounded-full object-cover ring-1 ring-primary/35" /></div><div className="flex flex-col justify-center"><SectionHeading eyebrow="Sobre a G Car" title={<>Por trás de cada carro,<br/><span className="text-primary">existe um cuidado.</span></>} description="A G Car Estética Automotiva nasce de uma ideia simples: cada veículo merece ser tratado com critério, respeito aos materiais e atenção verdadeira aos detalhes." /><p className="max-w-2xl leading-relaxed text-muted-foreground">Antes de indicar qualquer tratamento, buscamos entender o que o seu carro realmente precisa. Assim, o atendimento se torna mais próximo, transparente e direcionado ao melhor resultado possível.</p><WhatsAppLink className="mt-8 w-full sm:w-fit">Falar com a G Car</WhatsAppLink></div></div></section>
 
-      <section id="depoimentos" className="py-20 sm:py-28"><div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8"><SectionHeading eyebrow="Confiança" title="Quem conhece, confia." description="Este espaço está preparado para receber avaliações reais de clientes da G Car." /><div className="grid gap-4 md:grid-cols-3">{[1,2,3].map(i => <article key={i} className="rounded-md border border-dashed border-primary/35 bg-card p-7"><div className="text-primary">★★★★★</div><p className="mt-5 text-sm leading-relaxed text-muted-foreground">Depoimento real do cliente será inserido aqui.</p><p className="mt-7 font-display text-lg font-semibold uppercase">Cliente G Car</p><span className="text-xs text-muted-foreground">Conteúdo aguardando validação</span></article>)}</div></div></section>
+      <section id="avaliacoes" className="py-20 sm:py-28"><div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <SectionHeading eyebrow="Avaliações reais no Google" title="O que nossos clientes dizem" description="Avaliações publicadas por clientes no perfil oficial da GCAR no Google." />
+        <div className="mb-8 flex flex-col items-start gap-5 rounded-md border border-border bg-card p-6 sm:flex-row sm:items-center sm:justify-between sm:p-8">
+          <div className="flex items-center gap-5"><span className="font-display text-6xl font-extrabold leading-none text-primary">{GOOGLE_RATING.toFixed(1)}</span><div><Stars rating={GOOGLE_RATING} /><p className="mt-2 text-sm text-muted-foreground">{GOOGLE_REVIEW_COUNT} avaliações no Google</p></div></div>
+          <Button asChild size="xl" variant="premiumOutline" className="w-full sm:w-auto"><a href={GOOGLE_REVIEWS_URL} target="_blank" rel="noreferrer">Ver todas no Google <ArrowRight /></a></Button>
+        </div>
+        <div className="grid gap-4 md:grid-cols-2">{googleReviews.map((review) => <article key={review.author} className="rounded-md border border-border bg-card p-7 transition-colors hover:bg-surface-elevated"><div className="flex items-center justify-between"><Stars rating={review.rating} /><span className="text-xs text-muted-foreground">{review.when}</span></div><p className="mt-5 text-sm leading-relaxed text-muted-foreground">“{review.text}”</p><p className="mt-6 font-display text-lg font-semibold uppercase">{review.author}</p><span className="text-xs text-muted-foreground">Avaliação publicada no Google</span></article>)}</div>
+      </div></section>
 
       <section className="relative overflow-hidden border-y border-primary/20 bg-primary py-16 text-primary-foreground sm:py-20"><div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-8 px-4 sm:px-6 lg:flex-row lg:items-center lg:px-8"><div><h2 className="max-w-3xl font-display text-4xl font-extrabold uppercase leading-none sm:text-6xl">Pronto para deixar seu carro em outro nível?</h2><p className="mt-4 max-w-2xl font-medium">Fale com nossa equipe e descubra o tratamento ideal para o seu veículo.</p></div><Button asChild size="xl" variant="secondary" className="w-full shrink-0 sm:w-auto"><a href={whatsappUrl()} target="_blank" rel="noreferrer"><MessageCircle />Falar no WhatsApp</a></Button></div></section>
 
       <section id="faq" className="py-20 sm:py-28"><div className="mx-auto grid max-w-7xl gap-10 px-4 sm:px-6 lg:grid-cols-[0.8fr_1.2fr] lg:px-8"><SectionHeading eyebrow="Dúvidas" title="Perguntas frequentes" description="Respostas gerais para facilitar seu primeiro contato. Prazos e recomendações são confirmados após a avaliação do veículo." /><Accordion.Root type="single" collapsible className="border-t border-border">{faqItems.map(([q,a]) => <Accordion.Item key={q} value={q} className="border-b border-border"><Accordion.Header><Accordion.Trigger className="group flex w-full items-center justify-between py-5 text-left font-display text-xl font-semibold uppercase"><span>{q}</span><ChevronDown className="h-5 w-5 shrink-0 text-primary transition-transform group-data-[state=open]:rotate-180" /></Accordion.Trigger></Accordion.Header><Accordion.Content className="overflow-hidden data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down"><p className="pb-6 pr-10 text-sm leading-relaxed text-muted-foreground">{a}</p></Accordion.Content></Accordion.Item>)}</Accordion.Root></div></section>
 
-      <section id="contato" className="border-t border-border bg-card/50 py-20 sm:py-28"><div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8"><SectionHeading eyebrow="Contato" title="Onde estamos" description="O endereço ainda será confirmado. Enquanto isso, fale conosco para receber a localização e agendar seu atendimento." /><div className="grid gap-5 lg:grid-cols-2"><div className="grid gap-4 sm:grid-cols-2"><div className="rounded-md border border-border bg-card p-6"><Clock3 className="text-primary"/><h3 className="mt-8 font-display text-2xl font-bold uppercase">Atendimento</h3><p className="mt-3 text-sm text-muted-foreground">Segunda a sábado<br/>07:00 — 19:00<br/><span className="text-foreground">Domingo fechado</span></p></div><div className="rounded-md border border-border bg-card p-6"><MapPin className="text-primary"/><h3 className="mt-8 font-display text-2xl font-bold uppercase">Localização</h3><p className="mt-3 text-sm text-muted-foreground">Endereço aguardando confirmação.</p><WhatsAppLink className="mt-5 h-11 w-full px-4">Pedir localização</WhatsAppLink></div></div><div className="flex min-h-72 flex-col items-center justify-center rounded-md border border-dashed border-primary/35 bg-muted/40 p-8 text-center"><MapPin className="h-10 w-10 text-primary"/><p className="mt-4 font-display text-2xl font-semibold uppercase">Mapa em breve</p><p className="mt-2 max-w-xs text-sm text-muted-foreground">Será integrado assim que o endereço oficial for confirmado.</p></div></div></div></section>
+      <section id="contato" className="border-t border-border bg-card/50 py-20 sm:py-28"><div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <SectionHeading eyebrow="Contato" title="Onde estamos" description="Atendimento na unidade GCAR em Almirante Tamandaré. Veja o mapa, trace sua rota ou fale direto pelo WhatsApp." />
+        <div className="grid gap-5 lg:grid-cols-2">
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div className="rounded-md border border-border bg-card p-6"><Clock3 className="text-primary"/><h3 className="mt-8 font-display text-2xl font-bold uppercase">Atendimento</h3><p className="mt-3 text-sm text-muted-foreground">Segunda a sexta<br/>07:00 — 19:00<br/>Sábado 08:00 — 16:00<br/><span className="text-foreground">Domingo fechado</span></p></div>
+            <div className="rounded-md border border-border bg-card p-6"><MapPin className="text-primary"/><h3 className="mt-8 font-display text-2xl font-bold uppercase">Endereço</h3><address className="mt-3 text-sm not-italic leading-relaxed text-muted-foreground">{ADDRESS}</address><Button asChild size="xl" variant="premiumOutline" className="mt-5 h-11 w-full px-4"><a href={DIRECTIONS_URL} target="_blank" rel="noreferrer"><Navigation />Como chegar</a></Button><WhatsAppLink className="mt-3 h-11 w-full px-4">Falar no WhatsApp</WhatsAppLink></div>
+          </div>
+          <div className="overflow-hidden rounded-md border border-border bg-card"><iframe title="Mapa da localização da GCAR Estética Automotiva" src={MAP_EMBED_URL} loading="lazy" referrerPolicy="no-referrer-when-downgrade" allowFullScreen className="h-full min-h-72 w-full" /></div>
+        </div>
+      </div></section>
     </main>
     <footer className="border-t border-border py-10"><div className="mx-auto flex max-w-7xl flex-col gap-8 px-4 sm:px-6 lg:px-8"><div className="flex flex-col justify-between gap-6 md:flex-row md:items-center"><div className="flex items-center gap-3"><img src={logoAsset.url} alt="G Car" className="h-14 w-14 rounded-full object-cover"/><div><p className="font-display text-xl font-bold uppercase">G Car</p><p className="text-xs uppercase text-primary">Estética Automotiva</p></div></div><nav className="flex flex-wrap gap-x-6 gap-y-3">{navItems.slice(0,4).map(([label,href]) => <a key={href} href={href} className="text-xs font-semibold uppercase text-muted-foreground hover:text-primary">{label}</a>)}<a href={INSTAGRAM_URL} target="_blank" rel="noreferrer" className="text-xs font-semibold uppercase text-muted-foreground hover:text-primary">Instagram</a><a href={whatsappUrl()} target="_blank" rel="noreferrer" className="text-xs font-semibold uppercase text-muted-foreground hover:text-primary">WhatsApp</a></nav></div><div className="border-t border-border pt-6 text-xs text-muted-foreground">© 2026 G Car Estética Automotiva. Todos os direitos reservados.</div></div></footer>
     <a href={whatsappUrl()} target="_blank" rel="noreferrer" aria-label="Agendar pelo WhatsApp" className="animate-subtle-pulse fixed bottom-5 right-5 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-premium transition-transform hover:scale-105 sm:h-16 sm:w-16"><MessageCircle className="h-7 w-7" /></a>
