@@ -58,7 +58,7 @@ const services = [
 
 const navItems = [
   ["Início", "#inicio"], ["Serviços", "#servicos"], ["Sobre nós", "#sobre"],
-  ["Galeria", "#galeria"], ["Depoimentos", "#depoimentos"], ["FAQ", "#faq"], ["Contato", "#contato"],
+  ["Galeria", "#galeria"], ["Avaliações", "#avaliacoes"], ["FAQ", "#faq"], ["Contato", "#contato"],
 ];
 
 const advantages: Array<{ number: string; name: string; text: string; icon: ComponentType<{ className?: string }> }> = [
@@ -97,7 +97,7 @@ export const Route = createFileRoute("/")({
       { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [{ rel: "canonical", href: "/" }],
-    scripts: [{ type: "application/ld+json", children: JSON.stringify({ "@context": "https://schema.org", "@type": "AutoWash", name: "G Car Estética Automotiva", sameAs: [INSTAGRAM_URL], telephone: "+55 41 98510-6370", openingHours: "Mo-Sa 07:00-19:00" }) }],
+    scripts: [{ type: "application/ld+json", children: JSON.stringify({ "@context": "https://schema.org", "@type": "AutoWash", name: "GCAR Estética Automotiva", sameAs: [INSTAGRAM_URL], telephone: "+55 41 98510-6370", address: { "@type": "PostalAddress", streetAddress: "R. Mario Straioto, 481", addressLocality: "Almirante Tamandaré", addressRegion: "PR", postalCode: "83511-535", addressCountry: "BR" }, geo: { "@type": "GeoCoordinates", latitude: -25.348639, longitude: -49.3018283 }, openingHours: ["Mo-Fr 07:00-19:00", "Sa 08:00-16:00"], aggregateRating: { "@type": "AggregateRating", ratingValue: GOOGLE_RATING, reviewCount: GOOGLE_REVIEW_COUNT } }) }],
   }),
   component: Index,
 });
