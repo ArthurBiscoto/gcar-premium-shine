@@ -130,15 +130,8 @@ function SectionHeading({ eyebrow, title, description }: { eyebrow: string; titl
   return <div className="mb-10 max-w-3xl"><p className="mb-3 text-xs font-bold uppercase text-primary">{eyebrow}</p><h2 className="font-display text-4xl font-bold uppercase leading-none sm:text-6xl">{title}</h2>{description && <p className="mt-5 max-w-2xl leading-relaxed text-muted-foreground">{description}</p>}</div>;
 }
 
-function Comparison() {
-  const [position, setPosition] = useState(50);
-  return <div className="relative aspect-[16/10] overflow-hidden rounded-md border border-border bg-card">
-    <img src={comparisonImage} alt="Comparação visual do acabamento automotivo" width={1600} height={1008} loading="lazy" className="h-full w-full object-cover" />
-    <div className="absolute inset-y-0 right-0 overflow-hidden" style={{ width: `${100 - position}%` }}><img src={comparisonImage} alt="Acabamento após o detalhamento" width={1600} height={1008} className="absolute inset-y-0 right-0 h-full max-w-none object-cover saturate-125 contrast-125" style={{ width: `${10000 / (100 - position || 1)}%` }} /></div>
-    <div className="absolute inset-y-0 w-px bg-primary" style={{ left: `${position}%` }}><span className="absolute left-1/2 top-1/2 flex h-12 w-12 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-premium">↔</span></div>
-    <span className="absolute left-4 top-4 bg-background/80 px-3 py-1 text-xs font-bold uppercase backdrop-blur">Antes</span><span className="absolute right-4 top-4 bg-primary px-3 py-1 text-xs font-bold uppercase text-primary-foreground">Depois</span>
-    <input aria-label="Arraste para comparar antes e depois" type="range" min="5" max="95" value={position} onChange={(e) => setPosition(Number(e.target.value))} className="absolute inset-0 h-full w-full cursor-ew-resize opacity-0" />
-  </div>;
+function Stars({ rating, className = "" }: { rating: number; className?: string }) {
+  return <div className={`flex items-center gap-0.5 ${className}`} aria-label={`${rating} de 5 estrelas`}>{[1,2,3,4,5].map(i => <Star key={i} className={`h-4 w-4 ${i <= Math.round(rating) ? "fill-primary text-primary" : "text-muted-foreground"}`} />)}</div>;
 }
 
 function Index() {
@@ -165,7 +158,6 @@ function Index() {
         <p className="mt-5 text-center text-xs text-muted-foreground">Serviços e imagens apresentados como base inicial; confirme o tratamento ideal pelo WhatsApp.</p>
       </div></section>
 
-      <section className="border-y border-border bg-card/45 py-20 sm:py-28"><div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8"><SectionHeading eyebrow="Resultado visível" title={<>Olhe a <span className="text-primary">diferença.</span></>} description="Arraste o controle e perceba como um acabamento bem executado transforma a leitura da pintura." /><Comparison /></div></section>
 
       <section id="galeria" className="py-20 sm:py-28"><div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8"><div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-end"><SectionHeading eyebrow="Nosso universo" title="Cuidado que aparece" /><Button asChild variant="premiumOutline" size="xl"><a href={INSTAGRAM_URL} target="_blank" rel="noreferrer"><Instagram />Ver mais no Instagram</a></Button></div>
         <div className="grid auto-rows-[180px] grid-cols-2 gap-3 md:auto-rows-[230px] md:grid-cols-4">{galleryItems.map(({ src, alt, span }) => <div key={alt} className={`group overflow-hidden rounded-sm ${span}`}><img src={src} alt={alt} loading="lazy" className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]" /></div>)}</div>
