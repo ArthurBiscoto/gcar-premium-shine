@@ -10,8 +10,10 @@ import {
   MapPin,
   Menu,
   MessageCircle,
+  Navigation,
   ShieldCheck,
   Sparkles,
+  Star,
   Target,
   X,
   Zap,
@@ -25,10 +27,24 @@ import polishingImage from "@/assets/service-polimento.jpg";
 import interiorImage from "@/assets/service-higienizacao.jpg";
 import protectionImage from "@/assets/service-protecao.jpg";
 import washImage from "@/assets/service-lavagem.jpg";
-import comparisonImage from "@/assets/before-after.jpg";
 
 const WHATSAPP_NUMBER = "5541985106370";
 const INSTAGRAM_URL = "https://www.instagram.com/gcaresteticaautomotivaa/";
+
+const PLACE_ID = "ChIJz2m3RCXh3JQRr9SijGZm4Vc";
+const ADDRESS = "R. Mario Straioto, 481 — Lamenha Grande, Almirante Tamandaré - PR, 83511-535";
+const GOOGLE_REVIEWS_URL = "https://search.google.com/local/reviews?placeid=" + PLACE_ID;
+const DIRECTIONS_URL = `https://www.google.com/maps/dir/?api=1&destination_place_id=${PLACE_ID}&destination=${encodeURIComponent("GCAR ESTÉTICA AUTOMOTIVA, " + ADDRESS)}`;
+const MAP_EMBED_URL = `https://www.google.com/maps/embed/v1/place?key=${import.meta.env["VITE_LOVABLE_CONNECTOR_GOOGLE_MAPS_BROWSER_KEY"]}&q=place_id:${PLACE_ID}&language=pt-BR`;
+const GOOGLE_RATING = 5.0;
+const GOOGLE_REVIEW_COUNT = 4;
+
+const googleReviews = [
+  { author: "Juliano Brito", when: "um mês atrás", rating: 5, text: "Serviço sensacional, superou as expectativas, eu sou muito chato pra limpeza do carro, em 3 anos é a primeira vez que mando lavar fora e ficou espetacular, vidro mais cristalino que já vi, tudo feito no capricho, recomendo sem medo!!!" },
+  { author: "Lucas Lima", when: "3 meses atrás", rating: 5, text: "Já levei meu carro em vários Lava car da região mas sempre deixavam a desejar em algo, eu que sou chato com o carro foi o único lugar que me surpreendeu, detalhista mesmo, super indico 👏🏻" },
+  { author: "Marcelo Bahl", when: "3 meses atrás", rating: 5, text: "Atendimento top, e serviço realizado foi sensacional. Preço compatível com o mercado, quer da um UP no carro? O cara é diferenciado." },
+  { author: "Rafael Freitas", when: "2 meses atrás", rating: 5, text: "Fez a limpeza completa interna e externa no capricho, recomendo para todos aqui do Lamenha grande 🤝" },
+];
 
 const whatsappUrl = (message = "Olá! Gostaria de agendar uma avaliação para o meu veículo.") =>
   `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
